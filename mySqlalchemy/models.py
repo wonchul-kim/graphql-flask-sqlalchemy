@@ -25,7 +25,7 @@ class TrainLog(Base):
     log = Column(String)
     created_at = Column(DateTime, default=func.now())
     description = Column(String, nullable=True)
-    project_name = Column(String, ForeignKey("project.project_name"))
+    # project_name = Column(String, ForeignKey("project.project_name"))
     # project = relationship(Project, backref=backref('project', uselist=True, cascade='delete,all'))
     experiment_index = Column(Integer, ForeignKey("train_experiment.experiment_index"))
     experiment = relationship(TrainExperiment, backref=backref('experiment', uselist=True, cascade='delete,all'))

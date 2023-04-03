@@ -1,2 +1,5 @@
 # db 
-*.sqlites3
+*.sqlite3
+
+# caches
+__pycache__
