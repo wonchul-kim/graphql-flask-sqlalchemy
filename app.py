@@ -19,3 +19,23 @@ if __name__ == '__main__':
     init_db()
     app.run()
     
+example_query = """
+{
+  allEmployees(sort: [NAME_ASC, ID_ASC]) {
+    edges {
+      node {
+        id
+        name
+        department {
+          id
+          name
+        }
+        role {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+"""

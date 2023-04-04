@@ -1,6 +1,5 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func 
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, JSON, func 
 from sqlalchemy.orm import backref, relationship
-from sqlalchemy.dialects.postgresql import JSONB
 
 from mySqlalchemy.database import Base 
 
@@ -21,8 +20,7 @@ class TrainExperiment(Base):
 class TrainLog(Base):
     __tablename__ = 'train_log'
     epoch = Column(Integer, primary_key=True)
-    # log = Column(JSONB, nullable=False)
-    log = Column(String)
+    log = Column(JSON, nullable=False)
     created_at = Column(DateTime, default=func.now())
     description = Column(String, nullable=True)
     # project_name = Column(String, ForeignKey("project.project_name"))
