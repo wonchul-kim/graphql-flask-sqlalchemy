@@ -8,7 +8,7 @@ class ProjectQuery(SQLAlchemyObjectType):
     class Meta:
         model = Project 
         interfaces = (relay.Node,)
-        
+
 class TrainExperimentQuery(SQLAlchemyObjectType):
     class Meta:
         model = TrainExperiment

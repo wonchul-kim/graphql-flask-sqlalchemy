@@ -1,7 +1,7 @@
 from flask import Flask 
 from flask_graphql import GraphQLView
 
-from mySqlalchemy.database import init_db, db_session 
+from mySqlalchemy.database import db_session 
 from mySqlalchemy.schema import schema
 
 app = Flask(__name__)
@@ -16,7 +16,9 @@ def shutdown_session(exception=None):
     db_session.remove()
     
 if __name__ == '__main__':
+    from mySqlalchemy.actions import init_db, make_fake_db
     init_db()
+    make_fake_db()
     app.run()
     
 example_query = """
