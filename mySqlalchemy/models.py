@@ -27,4 +27,15 @@ class TrainLog(Base):
     # project = relationship(Project, backref=backref('project', uselist=True, cascade='delete,all'))
     experiment_index = Column(Integer, ForeignKey("train_experiment.experiment_index"))
     experiment = relationship(TrainExperiment, backref=backref('experiment', uselist=True, cascade='delete,all'))
+    
+class ServerStatus(Base):
+    __tablename__ = 'server_status'
+    server_name = Column(String, primary_key=True)
+    server_status = Column(String, nullable=False)
+    server_info = Column(JSON, nullable=True)
+    user_name = Column(String, nullable=True)
+    updated_at = Column(DateTime, default=func.now())
+    
+    
+    
 
