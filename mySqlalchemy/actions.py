@@ -5,9 +5,9 @@ def init_db():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
-def save_project_db(project_name):
+def save_project_db(project_name, author_name, description):
     ##FIXME: check if the project name already exists
-    project_db = Project(project_name=project_name)
+    project_db = Project(project_name=project_name, author_name=author_name, description=description)
     db_session.add(project_db)
     db_session.commit()
     
@@ -29,8 +29,8 @@ def save_log_db(experiment_db, epoch, log):
     
 def make_fake_db():
     ### create the fixtures 
-    interojo_db = save_project_db('interojo')
-    central_db = save_project_db('central')
+    interojo_db = save_project_db('interojo', 'wonchul', 'abc')
+    central_db = save_project_db('central', 'wonchul2', 'edf')
     
     interojo_experiment_db_1 = save_experiment_db(interojo_db, {"datasets": "interojo_ver2", "input_dir": 'abcdefghi'}, {"a": 1, "b": 2, "c": "abc"})
     interojo_experiment_db_2 = save_experiment_db(interojo_db, {"datasets": "interojo_ver22", "input_dir": 'ii'}, {"a": 100, "b": 20, "c": "abc"})

@@ -10,6 +10,12 @@ class ProjectSQL(SQLAlchemyObjectType):
         model = Project 
         interfaces = (relay.Node,)
 
+# class CreateProject(graphene.Mutation):
+#     class Arguments:
+#         project_name = graphene.String()
+#         author_name = graphene.String()
+    
+
 class TrainExperimentSQL(SQLAlchemyObjectType):
     class Meta:
         model = TrainExperiment
