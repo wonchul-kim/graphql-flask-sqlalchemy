@@ -32,25 +32,25 @@ class Query(graphene.ObjectType):
         return query.filter(Project.project_name==project_name).first()
     
     ### For exeriment ######################################################################################
-    find_train_experiment = graphene.Field(ProjectSQL, project_name=graphene.String(), experiment_index=graphene.Int())
     all_train_experiments = SQLAlchemyConnectionField(
         TrainExperimentSQL.connection
     )
     
-    def resolve_find_train_experiment(root, info, **args):
-        query = ProjectSQL.get_query(info)
-        project_name = args.get('project_name')
-        experiment_index = args.get("experiment_index")
-        
-        query = query.filter(Project.project_name==project_name)
-        query = query.filter(TrainExperiment.experiment_index==experiment_index).first()
-        
-        return query
-    
     ### For log ######################################################################################
+    find_train_log = graphene.Field(TrainLogSQL, project_name=graphene.String(), experiment_index=graphene.Int())
     all_train_logs = SQLAlchemyConnectionField(
         TrainLogSQL.connection
     )
+    
+    def resolve_find_train_log(root, info, **args):
+        query = TrainLogSQL.get_query(info)
+        project_name = args.get('project_name')
+        experiment_index = args.get("experiment_index")
+        
+        query = query.filter(TrainLog.project_name==project_name)
+        query = query.filter(TrainLog.experiment_index==experiment_index)
+        
+        return query.all()
     
     # ### disable sorting over this field 
     # all_train_logs = SQLAlchemyConnectionField(
