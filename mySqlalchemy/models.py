@@ -27,13 +27,14 @@ class TrainExperiment(Base):
 
 class TrainLog(Base):
     __tablename__ = 'train_log'
-    epoch = Column(Integer, primary_key=True)
+    # epoch = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, unique=True, autoincrement=True)
     log = Column(JSON, nullable=False)
     created_at = Column(DateTime, default=func.now())
     description = Column(String, nullable=True)
 
     project_name = Column(String, ForeignKey("project.project_name"))
-    experiment_index = Column(String, ForeignKey("train_experiment.experiment_index"))
+    experiment_index = Column(Integer, ForeignKey("train_experiment.experiment_index"))
 
 class ServerStatus(Base):
     __tablename__ = 'server_status'

@@ -6,40 +6,9 @@ from graphene import relay
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from sqlalchemy import and_
 
-class ProjectSQL(SQLAlchemyObjectType):
-    class Meta:
-        model = Project 
-        interfaces = (relay.Node,)
-
-class CreateProject(graphene.Mutation):
-    class Arguments:
-        project_name = graphene.String()
-        author_name = graphene.String()
-        description = graphene.String()
-
-    ok = graphene.Boolean()
-    project = graphene.Field(ProjectSQL)
-    
-    @classmethod 
-    def mutate(root, info, _, **args):
-        project_db = Project(project_name=args.get('project_name'), author_name=args.get('author_name'), description=args.get('description'))
-        db_session.add(project_db)
-        db_session.commit()
-        ok = True 
-        
-        return CreateProject(project=project_db, ok=ok)
-    
-
-    
-class TrainExperimentSQL(SQLAlchemyObjectType):
-    class Meta:
-        model = TrainExperiment
-        interfaces = (relay.Node,)
-        
-class TrainLogSQL(SQLAlchemyObjectType):
-    class Meta:
-        model = TrainLog 
-        interfaces = (relay.Node,)
+from .schemas.project_schema import CreateProject, ProjectSQL
+from .schemas.train_experiment_schema import TrainExperimentSQL
+from .schemas.train_log_schema import TrainLogSQL
         
 class Query(graphene.ObjectType):
     node = relay.Node.Field()
@@ -49,7 +18,7 @@ class Query(graphene.ObjectType):
     #     ProjectSQL.connection, sort=ProjectSQL.sort_argument()
     # )
 
-    ### allow sorting over multiple columns, by default over the primary key
+    ### For project ######################################################################################
     find_project = graphene.Field(ProjectSQL, project_name=graphene.String())
     all_projects = SQLAlchemyConnectionField(
         ProjectSQL.connection
@@ -62,10 +31,23 @@ class Query(graphene.ObjectType):
         # you can also use and_ with filter() eg: filter(and_(param1, param2)).first()
         return query.filter(Project.project_name==project_name).first()
     
-    
+    ### For exeriment ######################################################################################
+    find_train_experiment = graphene.Field(ProjectSQL, project_name=graphene.String(), experiment_index=graphene.Int())
     all_train_experiments = SQLAlchemyConnectionField(
         TrainExperimentSQL.connection
     )
+    
+    def resolve_find_train_experiment(root, info, **args):
+        query = ProjectSQL.get_query(info)
+        project_name = args.get('project_name')
+        experiment_index = args.get("experiment_index")
+        
+        query = query.filter(Project.project_name==project_name)
+        query = query.filter(TrainExperiment.experiment_index==experiment_index).first()
+        
+        return query
+    
+    ### For log ######################################################################################
     all_train_logs = SQLAlchemyConnectionField(
         TrainLogSQL.connection
     )
