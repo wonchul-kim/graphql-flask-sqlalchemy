@@ -29,9 +29,8 @@ class Query(graphene.ObjectType):
         user_name = kwargs.get('user_name')
         
         query = query.filter(User.user_name==user_name)
-        objs = query.first()
         
-        return objs
+        return query
 
 
     ### For project ######################################################################################
@@ -45,7 +44,7 @@ class Query(graphene.ObjectType):
         project_name = args.get('project_name')
         
         # you can also use and_ with filter() eg: filter(and_(param1, param2)).first()
-        return query.filter(Project.project_name==project_name).first()
+        return query.filter(Project.project_name==project_name)
     
     # ### For exeriment ######################################################################################
     # find_train_experiment = graphene.Field(TrainExperimentSQL, experiment=graphene.Int())
