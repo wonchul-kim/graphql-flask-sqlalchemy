@@ -1,7 +1,6 @@
 from mySqlalchemy.models import User, Project, TrainExperiment, TrainLog
 from mySqlalchemy.database import db_session
 import graphene 
-from graphene import relay 
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from sqlalchemy import and_
 
@@ -11,83 +10,89 @@ from .schemas.train_experiment_schema import TrainExperimentSQL, CreateTrainExpe
 from .schemas.train_log_schema import TrainLogSQL, CreateTrainLog
 
 class Query(graphene.ObjectType):
-    node = relay.Node.Field()
+    node = graphene.relay.Node.Field()
     
-    # ### allow only single column sorting 
-    # all_projects = SQLAlchemyConnectionField(
-    #     ProjectSQL.connection, sort=ProjectSQL.sort_argument()
-    # )
-
     ### for user ###########################################################################################
-    find_user = graphene.Field(UserSQL, user_name=graphene.String())
     all_users = SQLAlchemyConnectionField(
-        UserSQL.connection
+        UserSQL.connection, sort=UserSQL.sort_argument() # allow only single column sorting
     )
 
-    def reolve_find_user(root, info, **kwargs):
+    find_user = graphene.Field(UserSQL, user_name=graphene.String())
+    def resolve_find_user(root, info, **kwargs):
         query = UserSQL.get_query(info)
         user_name = kwargs.get('user_name')
         
         query = query.filter(User.user_name==user_name)
+        objs = query.first()
         
-        return query
-
-
+        return objs
+    
     ### For project ######################################################################################
-    find_project = graphene.Field(ProjectSQL, project_name=graphene.String())
     all_projects = SQLAlchemyConnectionField(
-        ProjectSQL.connection
+        ProjectSQL.connection, sort=UserSQL.sort_argument() # allow only single column sorting
     )
 
-    def resolve_find_project(root, info, **args):
+    find_project = graphene.Field(ProjectSQL, user_name=graphene.String(), project_name=graphene.String())
+    def resolve_find_project(root, info, **kwargs):
         query = ProjectSQL.get_query(info)
-        project_name = args.get('project_name')
         
         # you can also use and_ with filter() eg: filter(and_(param1, param2)).first()
-        return query.filter(Project.project_name==project_name)
-    
-    # ### For exeriment ######################################################################################
-    # find_train_experiment = graphene.Field(TrainExperimentSQL, experiment=graphene.Int())
-    # all_train_experiments = SQLAlchemyConnectionField(
-    #     TrainExperimentSQL.connection
-    # )
-    
-    # def resolve_find_train_experiment(root, info, **args):
-    #     query = TrainExperimentSQL.get_query(info)
-    #     # project_name = args.get("project_name")
-    #     experiment = args.get('experiment')
+        if 'project_name' in kwargs.keys():
+            project_name = kwargs.get('project_name')
+            query = query.filter(Project.project_name==project_name)
+        if 'user_name' in kwargs.keys():
+            user_name = kwargs.get("user_name")
+            user_db = db_session.query(User).filter_by(user_name=user_name).first()
+            query = query.filter(Project.user==user_db)
+        objs = query.first()
         
-    #     # query = query.filter(TrainExperiment.project_name==project_name)
-    #     query = query.filter(TrainExperiment.experiment==experiment)
-    #     objs = query.first()
+        return objs
+        
+    ### For exeriment ######################################################################################
+    all_train_experiments = SQLAlchemyConnectionField(
+        TrainExperimentSQL.connection, sort=TrainExperimentSQL.sort_argument()
+    )
+    
+    find_train_experiment = graphene.Field(TrainExperimentSQL, user_name=graphene.String(), project_name=graphene.String(), experiment=graphene.Int())
+    def resolve_find_train_experiment(root, info, **kwargs):
+        query = TrainExperimentSQL.get_query(info)
+        
+        if 'experiment' in kwargs.keys():
+            experiment = kwargs.get('experiment')
+            query = query.filter(TrainExperiment.id==experiment)
+        if 'project_name' in kwargs.keys():
+            project_name = kwargs.get("project_name")
+            project_db = db_session.query(Project).filter_by(project_name=project_name).first()
+            query = query.filter(TrainExperiment.project==project_db)
+        if 'user_name' in kwargs.keys():
+            user_name = kwargs.get("user_name")
+            user_db = db_session.query(User).filter_by(user_name=user_name).first()
+            query = query.filter(TrainExperiment.user==user_db)
+        objs = query.first()
+        
+        return objs
+        
+    ### For log ######################################################################################
+    all_train_logs = SQLAlchemyConnectionField(
+        TrainLogSQL.connection
+    )
+    
+    # find_train_log = graphene.Field(TrainLogSQL, project=graphene.String(), experiment=graphene.Int())
+    # def resolve_find_train_log(root, info, **kwargs):
+    #     query = TrainLogSQL.get_query(info)
+    #     project_name = kwargs.get('project_name')
+    #     experiment_index = kwargs.get("experiment_index")
+        
+    #     query = query.filter(TrainLog.project_name==project_name)
+    #     query = query.filter(TrainLog.experiment_index==experiment_index)
+    #     objs = query.all()
         
     #     return objs
-        
-        
-
-
     
-    # ### For log ######################################################################################
-    # find_train_log = graphene.Field(TrainLogSQL, project=graphene.String(), experiment=graphene.Int())
+    # ### disable sorting over this field 
     # all_train_logs = SQLAlchemyConnectionField(
-    #     TrainLogSQL.connection
+    #     TrainLogSQL.connection, sort=None
     # )
-    
-    # # def resolve_find_train_log(root, info, **args):
-    # #     query = TrainLogSQL.get_query(info)
-    # #     project_name = args.get('project_name')
-    # #     experiment_index = args.get("experiment_index")
-        
-    # #     query = query.filter(TrainLog.project_name==project_name)
-    # #     query = query.filter(TrainLog.experiment_index==experiment_index)
-    # #     objs = query.all()
-        
-    # #     return objs
-    
-    # # ### disable sorting over this field 
-    # # all_train_logs = SQLAlchemyConnectionField(
-    # #     TrainLogSQL.connection, sort=None
-    # # )
     
 class myMutation(graphene.ObjectType):
     create_user = CreateUser.Field()

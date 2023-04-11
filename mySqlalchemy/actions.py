@@ -50,6 +50,7 @@ def make_fake_db():
     project_db2 = save_project_db('central', 'edf', user_db2)
     project_db3 = save_project_db("interojo", 'awef', user_db2)
     project_db4 = save_project_db("interojo", 'alfekjawelkfjawelkfjawlkefj', user_db2)
+    project_db4 = save_project_db("central", 'aaaaaaaaaa', user_db1)
     
     experiment_db1 = save_experiment_db({"datasets": "interojo_ver1", "input_dir": 'a'}, {"a": 1, "b": 2, "c": "a"}, user_db1, project_db1)
     experiment_db2 = save_experiment_db({"datasets": "interojo_ver2", "input_dir": 'b'}, {"a": 10, "b": 20, "c": "b"}, user_db1, project_db1)
