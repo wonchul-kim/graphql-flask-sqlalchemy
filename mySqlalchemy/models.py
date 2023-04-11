@@ -21,19 +21,19 @@ class Project(Base):
     accessed_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
     description = Column(String, nullable=True)
 
-    user_name = Column(String, ForeignKey("user.user_name"))
+    user_id = Column(String, ForeignKey("user.id"))
     train_experiments = relationship("TrainExperiment", backref="project", cascade='all, delete-orphan')
 
 class TrainExperiment(Base):
     __tablename__ = 'train_experiment'
-    experiment_index = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     dataset_info = Column(JSON, nullable=False)
     parameters = Column(JSON, nullable=False)
     created_at = Column(DateTime, default=func.now())
     accessed_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
 
-    user_name = Column(String, ForeignKey("user.user_name"))
-    project_name = Column(String, ForeignKey("project.project_name"))
+    user_id = Column(String, ForeignKey("user.id"))
+    project_id = Column(String, ForeignKey("project.id"))
     train_logs = relationship("TrainLog", backref="train_experiment", cascade="all, delete-orphan")
     
 class TrainLog(Base):
@@ -44,7 +44,7 @@ class TrainLog(Base):
     created_at = Column(DateTime, default=func.now())
     accessed_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
     
-    experiment_index = Column(Integer, ForeignKey('train_experiment.experiment_index'))
+    train_experiment_id = Column(Integer, ForeignKey('train_experiment.id'))
 
 class ServerStatus(Base):
     __tablename__ = 'server_status'
@@ -55,8 +55,3 @@ class ServerStatus(Base):
     user_name = Column(String, nullable=True)
     created_at = Column(DateTime, default=func.now())
     updated_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
-
-    
-    
-    
-
