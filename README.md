@@ -6,7 +6,7 @@
 
 2. [GET and POST Requests in GraphQL API using Python requests](https://www.geeksforgeeks.org/get-and-post-requests-in-graphql-api-using-python-requests/)
 
-3.
+3. [How to add related object instance using SQLAlchemy](https://github.com/w8s/flask-model-relationships)
 
 - https://github.com/Wandonium/flask-book-api
 - https://velog.io/@combi_jihoon/GraphQL-%EC%8B%A4%ED%96%89
