@@ -9,7 +9,8 @@ class User(Base):
     user_name = Column(String, nullable=False)
     created_at = Column(DateTime, default=func.now())
     accessed_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
-    
+    description = Column(String, nullable=True)
+
     projects = relationship("Project", backref="user", cascade="all, delete-orphan")
     train_experiments = relationship("TrainExperiment", backref="user", cascade='all, delete-orphan')
 

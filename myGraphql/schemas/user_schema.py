@@ -10,13 +10,21 @@ class UserSQL(SQLAlchemyObjectType):
         interfaces = (relay.Node,)
 
 
-class CreateUser(graphene.mutation):
-    class Arguemtns:
-        user_name = graphene.String()
+class CreateUser(graphene.Mutation):
+    class Arguments:
+        user_name = graphene.String(required=True)
+        description = graphene.String(required=False)
         
-    ok = graphene.Boolean()
+    done = graphene.Boolean()
     user = graphene.Field(UserSQL)
     
     @classmethod 
-    def mutate(root, info, **kwargs):
-        user_db = User(user_name=kwargs.get("user_name"), )
+    def mutate(root, info, _, **kwargs):
+        user_name = kwargs.get("user_name")
+        user_db = User(user_name=user_name)
+        
+        db_session.add(user_db)
+        db_session.commit()
+        done = True
+        
+        return CreateUser(user=user_db, done=done)

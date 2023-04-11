@@ -1,14 +1,14 @@
-from mySqlalchemy.models import User, Project#, TrainExperiment, TrainLog
+from mySqlalchemy.models import User, Project, TrainExperiment, TrainLog
 from mySqlalchemy.database import db_session
 import graphene 
 from graphene import relay 
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from sqlalchemy import and_
 
-from .schemas.user_schema import UserSQL
-from .schemas.project_schema import CreateProject, ProjectSQL
-from .schemas.train_experiment_schema import TrainExperimentSQL
-from .schemas.train_log_schema import TrainLogSQL
+from .schemas.user_schema import UserSQL, CreateUser
+from .schemas.project_schema import ProjectSQL, CreateProject
+from .schemas.train_experiment_schema import TrainExperimentSQL, CreateTrainExperiment
+from .schemas.train_log_schema import TrainLogSQL, CreateTrainLog
 
 class Query(graphene.ObjectType):
     node = relay.Node.Field()
@@ -90,8 +90,10 @@ class Query(graphene.ObjectType):
     # # )
     
 class myMutation(graphene.ObjectType):
+    create_user = CreateUser.Field()
     create_project = CreateProject.Field()
+    create_train_experiment = CreateTrainExperiment.Field()
+    create_train_log = CreateTrainLog.Field()
     
     
-# schema = graphene.Schema(query=Query, mutation=myMutation, types=[ProjectSQL, TrainExperimentSQL, TrainLogSQL])
-schema = graphene.Schema(query=Query, mutation=myMutation, types=[UserSQL, ProjectSQL])
+schema = graphene.Schema(query=Query, mutation=myMutation, types=[UserSQL, ProjectSQL, TrainExperimentSQL, TrainLogSQL])
