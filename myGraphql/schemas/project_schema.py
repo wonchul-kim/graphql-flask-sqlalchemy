@@ -28,8 +28,8 @@ class CreateProject(graphene.Mutation):
                 project_db = Project(project_name=project_name, description=description)
                 if 'user_name' in kwargs.keys():
                     user_db = db_session.query(User).filter_by(user_name=kwargs.get("user_name")).first()
-                    project_db.user = user_db
                     user_db.projects.append(project_db)
+                    project_db.user = user_db
                 db_session.add(project_db)
                 db_session.commit()
                 done = True 

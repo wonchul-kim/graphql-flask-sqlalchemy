@@ -11,25 +11,36 @@ class TrainExperimentSQL(SQLAlchemyObjectType):
         
 class CreateTrainExperiment(graphene.Mutation):
     class Arguments:
-        user_name = graphene.String(required=False)
-        project_name = graphene.String(required=False)
         dataset_info = graphene.types.json.JSONString(required=True)
         parameters = graphene.types.json.JSONString(required=True)
+        user_name = graphene.String(required=False)
+        project_name = graphene.String(required=False)
         
     done = graphene.Boolean()
+    verbose = graphene.String()
     train_experiment = graphene.Field(TrainExperimentSQL)
     
     @classmethod 
     def mutate(root, info, _, **kwargs):
-        train_experiment_db = TrainExperiment(project_name=kwargs.get('project_name'), description=kwargs.get('description'))
-        db_session.add(train_experiment_db)
-        if 'user_name' in kwargs.keys():
-            user_db = db_session.query(User).filter_by(user_name=kwargs.get("user_name")).first()
-            train_experiment_db.user = user_db
-        if 'project_name' in kwargs.keys():
-            train_experiment_db.project = db_session.qeury(Project).filter_by(project_name=kwargs.get('project_name')).first()
-        db_session.commit()
-        done = True 
+        if "dataset_info" in kwargs.keys() and "parameters" in kwargs.keys():
+            train_experiment_db = TrainExperiment(dataset_info=kwargs.get('dataset_info'), parameters=kwargs.get('parameters'), \
+                                                    description=kwargs.get('description'))
+            if 'user_name' in kwargs.keys():
+                user_db = db_session.query(User).filter_by(user_name=kwargs.get("user_name")).first()
+                user_db.train_experiments.append(train_experiment_db)
+                train_experiment_db.user = user_db
+            if 'project_name' in kwargs.keys():
+                project_db = db_session.qeury(Project).filter_by(project_name=kwargs.get('project_name')).first()
+                project_db.train_experiments.append(train_experiment_db)
+                train_experiment_db.project = project_db
+            db_session.add(train_experiment_db)
+            db_session.commit()
+            done = True 
+            verbose = "Seccessfully done"
+        else:
+            done = False 
+            verbose = "Dataset_info and parameters must be provided "
         
-        return CreateTrainExperiment(train_experiment=train_experiment_db, done=done)
+        return CreateTrainExperiment(done=done, verbose=verbose)
+        
         

@@ -24,8 +24,8 @@ def save_project_db(project_name, description, user_db):
 def save_experiment_db(dataset_info, parameters, user_db, project_db):
     experiment_db = TrainExperiment(dataset_info=dataset_info, parameters=parameters)
     experiment_db.project = project_db
-    # experiment_db.user = user_db
-    # user_db.train_experiment.append(experiment_db)
+    experiment_db.user = user_db
+    user_db.train_experiments.append(experiment_db)
     project_db.train_experiments.append(experiment_db)
     db_session.add(experiment_db)
     db_session.commit()

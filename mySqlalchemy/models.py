@@ -31,10 +31,11 @@ class TrainExperiment(Base):
     parameters = Column(JSON, nullable=False)
     created_at = Column(DateTime, default=func.now())
     accessed_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
-
+    description = Column(String, nullable=True)
+    
     ### User
     user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"))
-    user = relationship("User", backref=sqlalchemy.orm.backref("train_experiment", cascade="all,delete"))
+    user = relationship("User", backref=sqlalchemy.orm.backref("train_experiments", cascade="all,delete"))
     
     ### Project
     project_id = Column(Integer, ForeignKey("project.id", ondelete="CASCADE"))

@@ -13,20 +13,27 @@ class TrainLogSQL(SQLAlchemyObjectType):
         
 class CreateTrainLog(graphene.Mutation):
     class Arguments:
-        train_experiment_id = graphene.Int()
-        log = graphene.types.json.JSONString()
+        log = graphene.types.json.JSONString(required=True)
         
     done = graphene.Boolean()
+    verbose = graphene.String()
     train_log = graphene.Field(TrainLogSQL)
     
     @classmethod 
     def mutate(root, info, _, **kwargs):
-        train_log_db = TrainLog(project_name=kwargs.get('project_name'), description=kwargs.get('description'))
-        db_session.add(train_log_db)
-        if 'train_experiment_id' in kwargs.keys():
-            train_log_db.train_experiment_id = db_session.qeury(TrainExperiment).filter_by(id=kwargs.get('train_experiment_id')).first()
-        db_session.commit()
-        done = True 
+        if "log" in kwargs.keys():
+            train_log_db = TrainLog(log=kwargs.get("log"))
+            if 'train_experiment_id' in kwargs.keys():
+                train_experiment_db = db_session.qeury(TrainExperiment).filter_by(id=kwargs.get('train_experiment_id')).first()
+                train_experiment_db.train_logs.append(train_log_db)
+                train_log_db.train_experiment = train_experiment_db
+            db_session.add(train_log_db)
+            db_session.commit()
+            done = True 
+            verbose = "Sueccessfully done"
+        else:
+            done = False 
+            verbose = "A log must be provided"
         
-        return CreateTrainLog(train_log=train_log_db, done=done)
+        return CreateTrainLog(done=done, verbose=verbose)
         
