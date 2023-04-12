@@ -4,8 +4,8 @@ import graphene
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from sqlalchemy import and_
 
-from .schemas.user_schema import UserSQL, CreateUser, DeleteUser
-from .schemas.project_schema import ProjectSQL, CreateProject
+from .schemas.user_schema import UserSQL, CreateUser, DeleteUser, UpdateUser
+from .schemas.project_schema import ProjectSQL, CreateProject, DeleteProject, UpdateProject
 from .schemas.train_experiment_schema import TrainExperimentSQL, CreateTrainExperiment
 from .schemas.train_log_schema import TrainLogSQL, CreateTrainLog
 
@@ -97,7 +97,10 @@ class Query(graphene.ObjectType):
 class myMutation(graphene.ObjectType):
     create_user = CreateUser.Field()
     delete_user = DeleteUser.Field()
+    update_user = UpdateUser.Field()
     create_project = CreateProject.Field()
+    delete_project = DeleteProject.Field()
+    update_project = UpdateProject.Field()
     create_train_experiment = CreateTrainExperiment.Field()
     create_train_log = CreateTrainLog.Field()
     

@@ -47,6 +47,8 @@ def make_fake_db():
     user_db2 = save_user_db("wonchul2")
     user_db3 = save_user_db("wonchul3")
     
+    # obj = db_session.query(User).filter_by(user_name="wonchul11").first()
+    
     project_db1 = save_project_db('interojo', 'abc', user_db1)
     project_db2 = save_project_db('central', 'edf', user_db2)
     project_db3 = save_project_db("interojo", 'awef', user_db2)

@@ -21,7 +21,7 @@ class Project(Base):
     description = Column(String, nullable=True)
 
     ### User
-    user_name = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"))
+    user_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"))
     user = relationship("User", backref=sqlalchemy.orm.backref("projects", cascade="all,delete"))
     
 class TrainExperiment(Base):
@@ -33,11 +33,11 @@ class TrainExperiment(Base):
     accessed_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
 
     ### User
-    user_name = Column(String, ForeignKey("user.user_name", ondelete="CASCADE"))
+    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"))
     user = relationship("User", backref=sqlalchemy.orm.backref("train_experiment", cascade="all,delete"))
     
     ### Project
-    project_name = Column(Integer, ForeignKey("project.id", ondelete="CASCADE"))
+    project_id = Column(Integer, ForeignKey("project.id", ondelete="CASCADE"))
     project = relationship("Project", backref=sqlalchemy.orm.backref("train_experiments", cascade="all,delete"))
     
 class TrainLog(Base):
