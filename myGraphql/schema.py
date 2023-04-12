@@ -4,7 +4,7 @@ import graphene
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from sqlalchemy import and_
 
-from .schemas.user_schema import UserSQL, CreateUser
+from .schemas.user_schema import UserSQL, CreateUser, DeleteUser
 from .schemas.project_schema import ProjectSQL, CreateProject
 from .schemas.train_experiment_schema import TrainExperimentSQL, CreateTrainExperiment
 from .schemas.train_log_schema import TrainLogSQL, CreateTrainLog
@@ -14,7 +14,7 @@ class Query(graphene.ObjectType):
     
     ### for user ###########################################################################################
     all_users = SQLAlchemyConnectionField(
-        UserSQL.connection, sort=UserSQL.sort_argument() # allow only single column sorting
+        UserSQL.connection#, sort=UserSQL.sort_argument() # allow only single column sorting
     )
 
     find_user = graphene.Field(UserSQL, user_name=graphene.String())
@@ -29,7 +29,7 @@ class Query(graphene.ObjectType):
     
     ### For project ######################################################################################
     all_projects = SQLAlchemyConnectionField(
-        ProjectSQL.connection, sort=UserSQL.sort_argument() # allow only single column sorting
+        ProjectSQL.connection#, sort=UserSQL.sort_argument() # allow only single column sorting
     )
 
     find_project = graphene.Field(ProjectSQL, user_name=graphene.String(), project_name=graphene.String())
@@ -50,7 +50,7 @@ class Query(graphene.ObjectType):
         
     ### For exeriment ######################################################################################
     all_train_experiments = SQLAlchemyConnectionField(
-        TrainExperimentSQL.connection, sort=TrainExperimentSQL.sort_argument()
+        TrainExperimentSQL.connection#, sort=TrainExperimentSQL.sort_argument()
     )
     
     find_train_experiment = graphene.Field(TrainExperimentSQL, user_name=graphene.String(), project_name=graphene.String(), experiment=graphene.Int())
@@ -96,6 +96,7 @@ class Query(graphene.ObjectType):
     
 class myMutation(graphene.ObjectType):
     create_user = CreateUser.Field()
+    delete_user = DeleteUser.Field()
     create_project = CreateProject.Field()
     create_train_experiment = CreateTrainExperiment.Field()
     create_train_log = CreateTrainLog.Field()

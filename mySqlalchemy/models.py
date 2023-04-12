@@ -1,3 +1,4 @@
+import sqlalchemy
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, JSON, func, TIMESTAMP, Table
 from sqlalchemy.orm import relationship
 
@@ -11,9 +12,6 @@ class User(Base):
     accessed_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
     description = Column(String, nullable=True)
 
-    projects = relationship("Project", backref="user", cascade="all, delete-orphan")
-    train_experiments = relationship("TrainExperiment", backref="user", cascade='all, delete-orphan')
-
 class Project(Base):
     __tablename__ = 'project'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -22,9 +20,10 @@ class Project(Base):
     accessed_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
     description = Column(String, nullable=True)
 
-    user_id = Column(String, ForeignKey("user.id"))
-    train_experiments = relationship("TrainExperiment", backref="project", cascade='all, delete-orphan')
-
+    ### User
+    user_name = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"))
+    user = relationship("User", backref=sqlalchemy.orm.backref("projects", cascade="all,delete"))
+    
 class TrainExperiment(Base):
     __tablename__ = 'train_experiment'
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -33,9 +32,13 @@ class TrainExperiment(Base):
     created_at = Column(DateTime, default=func.now())
     accessed_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
 
-    user_id = Column(String, ForeignKey("user.id"))
-    project_id = Column(String, ForeignKey("project.id"))
-    train_logs = relationship("TrainLog", backref="train_experiment", cascade="all, delete-orphan")
+    ### User
+    user_name = Column(String, ForeignKey("user.user_name", ondelete="CASCADE"))
+    user = relationship("User", backref=sqlalchemy.orm.backref("train_experiment", cascade="all,delete"))
+    
+    ### Project
+    project_name = Column(Integer, ForeignKey("project.id", ondelete="CASCADE"))
+    project = relationship("Project", backref=sqlalchemy.orm.backref("train_experiments", cascade="all,delete"))
     
 class TrainLog(Base):
     __tablename__ = 'train_log'
@@ -45,7 +48,9 @@ class TrainLog(Base):
     created_at = Column(DateTime, default=func.now())
     accessed_at = Column(TIMESTAMP, default=func.now(), onupdate=func.current_timestamp())
     
-    train_experiment_id = Column(Integer, ForeignKey('train_experiment.id'))
+    ### TrainExperiment
+    train_experiment_id = Column(Integer, ForeignKey('train_experiment.id', ondelete="CASCADE"))
+    train_experiment = relationship("TrainExperiment", backref=sqlalchemy.orm.backref("train_logs", cascade="all,delete"))
 
 class ServerStatus(Base):
     __tablename__ = 'server_status'

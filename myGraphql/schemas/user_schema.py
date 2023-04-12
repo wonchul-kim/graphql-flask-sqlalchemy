@@ -26,3 +26,22 @@ class CreateUser(graphene.Mutation):
         done = True
         
         return CreateUser(user=user_db, done=done)
+    
+class DeleteUser(graphene.Mutation):
+    class Arguments:
+        user_name = graphene.String(required=True)
+        
+    done = graphene.Boolean()
+    user = graphene.Field(UserSQL)
+    
+    @classmethod 
+    def mutate(root, info, _, **kwargs):
+        user_name = kwargs.get("user_name")
+        try:        
+            db_session.query(User).filter_by(user_name=user_name).delete()        
+            db_session.commit()
+            done = True
+        except:
+            done = False
+        
+        return CreateUser(done=done) 
