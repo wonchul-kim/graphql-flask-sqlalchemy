@@ -1,4 +1,4 @@
-#!/home/wonchul/github/graphql-tutorial/.venv/bin/python
+#!/home/wonchul/github/graphql-flask-sqlalchemy/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
