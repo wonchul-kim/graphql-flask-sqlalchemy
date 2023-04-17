@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  postgre:
+    image: postgres:latest
+    container_name: aiv-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - ${POSTGRES_HOME_DIR}/:/var/lib/posgresql/data
+    networks:
+      - postgres-net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: aiv-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}"
+      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD}"
+      TZ: Asia/Seoul
+    ports:
+      - ${PGADMIN_PORT}:80
+    volumes:
+      - ${PGADMIN_HOME_DIR}:/var/lib 
+    depends_on:
+      - postgres 
+    networks:
+      - postgres-net
+
+networks:
+  postgres-net:
+    driver: bridge
+    

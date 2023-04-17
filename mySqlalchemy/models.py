@@ -34,7 +34,7 @@ class TrainExperiment(Base):
     description = Column(String, nullable=True)
     
     ### User
-    user_id = Column(String, ForeignKey("user.id", ondelete="CASCADE"))
+    user_id = Column(Integer, ForeignKey("user.id", ondelete="CASCADE"))
     user = relationship("User", backref=sqlalchemy.orm.backref("train_experiments", cascade="all,delete"))
     
     ### Project
