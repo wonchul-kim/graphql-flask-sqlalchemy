@@ -1,3 +1,7 @@
+## Flask + SQLAlchemy + GraphQL + postgreSQL
+
+<img src="./figs/flask_sqlalchemy_graphql_arch.png">
+
 ### references
 
 1. [flask + sqlalchemy + graphene](https://github.com/graphql-python/graphene-sqlalchemy/tree/master/examples/flask_sqlalchemy)
