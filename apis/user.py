@@ -1,4 +1,3 @@
-import re
 from client import client
 import asyncio
 
@@ -16,7 +15,6 @@ def read_all_users(use_async=True, verbose=False, only_users=True):
                     }
                 }
             }
-            
             """
 
     if use_async:

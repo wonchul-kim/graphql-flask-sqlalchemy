@@ -30,7 +30,7 @@ class CreateTrainExperiment(graphene.Mutation):
                 user_db.train_experiments.append(train_experiment_db)
                 train_experiment_db.user = user_db
             if 'project_name' in kwargs.keys():
-                project_db = db_session.qeury(Project).filter_by(project_name=kwargs.get('project_name')).first()
+                project_db = db_session.query(Project).filter_by(project_name=kwargs.get('project_name')).first()
                 project_db.train_experiments.append(train_experiment_db)
                 train_experiment_db.project = project_db
             db_session.add(train_experiment_db)
