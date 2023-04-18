@@ -38,13 +38,13 @@ def read_all_users(use_async=True, verbose=False, only_users=True):
 
 def create_user(variables={}, use_async=True, verbose=False, only_done=True):
     query = """
-        mutation ($user_name: String!) {
-            createUser(userName: $user_name) {
-                done
-                verbose
+            mutation ($user_name: String!) {
+                createUser(userName: $user_name) {
+                    done
+                    verbose
+                }
             }
-        }
-    """
+            """
     
     if use_async:
         response = asyncio.run(client.execute_async(query=query, variables=variables))
@@ -59,16 +59,56 @@ def create_user(variables={}, use_async=True, verbose=False, only_done=True):
     else:
         return response['data']['createUser']
     
+def delete_user(variables={}, use_async=True, verbose=False):
+    query = """
+            mutation ($user_name: String!) {
+                deleteUser(userName: $user_name) {
+                    done
+                    verbose
+                }
+            }
+            """
+            
+    if use_async:
+        response = asyncio.run(client.execute_async(query=query, variables=variables))
+    else:
+        response = client.execute(query=query, variables=variables)
+    
+    if verbose:
+        print("* response: ", response)
+    
+    return response['data']['deleteUser']
+
+def update_user(variables={}, use_async=True, verbose=False):
+    query = """
+            mutation ($user_name: String!, $new_user_name: String!) {
+                updateUser(userName: $user_name, newUserName: $new_user_name) {
+                    done
+                    verbose
+                }
+            }
+            """
+            
+    if use_async:
+        response = asyncio.run(client.execute_async(query=query, variables=variables))
+    else:
+        response = client.execute(query=query, variables=variables)
+    
+    if verbose:
+        print("* response: ", response)
+    
+    return response['data']['updateUser']
+
 def find_user(variables={}, use_async=True, verbose=False):
     query = """
-        query ($user_name: String!){
-            findUser(userName: $user_name) {
-                id
-                userName
-                description
+            query ($user_name: String!){
+                findUser(userName: $user_name) {
+                    id
+                    userName
+                    description
+                }
             }
-        }
-    """
+            """
     
     if use_async:
         response = asyncio.run(client.execute_async(query=query, variables=variables))
@@ -94,4 +134,13 @@ if __name__ == '__main__':
     print(ret)
     variables = {"user_name": "wonchul1"}
     ret = find_user(variables, True, True)
+    print(ret)
+    
+    print("-----------------------------------------------------------------------------------------------------")
+    variables = {"user_name": "wonchul3"}
+    ret = delete_user(variables)
+    print(ret)
+    print("-----------------------------------------------------------------------------------------------------")
+    variables = {"user_name": "wonchul44", "new_user_name": "wonchul"}
+    ret = update_user(variables)
     print(ret)
