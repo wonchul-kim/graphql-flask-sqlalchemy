@@ -83,7 +83,9 @@ class UpdateProject(graphene.Mutation):
     def mutate(root, info, _, **kwargs):
         if 'project_name' in kwargs.keys() and 'new_project_name' in kwargs.keys():
             project_name = kwargs.get("project_name")
-            new_project_name = kwargs.get('new-project-name')
+            new_project_name = kwargs.get('new_project_name')
+            
+            print(">>>>> ", project_name, new_project_name)
             
             try: 
                 db_session.query(Project).filter_by(project_name=project_name).first().project_name = new_project_name
