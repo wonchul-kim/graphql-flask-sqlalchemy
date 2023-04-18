@@ -2,13 +2,19 @@ from client import client
 import asyncio
 import json 
 
-def read_all_train_experiments(use_async=True, verbose=False, only_train_projects=True):
+def read_all_train_logs(use_async=True, verbose=False, only_train_logs=True):
     query = """
-            query {
-                allTrainExperiments {
+            query{
+                allTrainLogs {
                     edges {
                         node {
                             id
+                            log
+                            trainExperimentId
+                                trainExperiment {
+                                    id
+                                }
+                            description
                         }
                     }
                 }
@@ -23,22 +29,22 @@ def read_all_train_experiments(use_async=True, verbose=False, only_train_project
     if verbose:
         print("* response: ", response)
         
-    edges = response['data']['allTrainExperiments']['edges']
+    edges = response['data']['allTrainLogs']['edges']
     
-    if only_train_projects:
-        experiments_list = []
+    if only_train_logs:
+        logs_list = []
         for edge in edges:
-            experiments_list.append(edge['node']['id'])
+            logs_list.append(edge['node']['log'])
             
-        return experiments_list
+        return logs_list
     else:
         return edges
 
-def create_train_experiment(variables={}, use_async=True, verbose=False, only_done=True):
+def create_train_log(variables={}, use_async=True, verbose=False, only_done=True):
 
     query = """
-            mutation ($user_name: String!, $project_name: String!, $dataset_info: JSONString!, $parameters: JSONString!){
-                createTrainExperiment(userName: $user_name, projectName: $project_name, datasetInfo: $dataset_info, parameters: $parameters){
+            mutation ($experiment_id: Int!, $log: JSONString!){
+                createTrainLog(experimentId: $experiment_id, log: $log){
                     done
                     verbose
                 }
@@ -54,18 +60,17 @@ def create_train_experiment(variables={}, use_async=True, verbose=False, only_do
         print("* response: ", response)
     
     if only_done:
-        return response['data']['createTrainExperiment']['done']
+        return response['data']['createTrainLog']['done']
     else:
-        return response['data']['createTrainExperiment']
+        return response['data']['createTrainLog']
                
 if __name__ == '__main__':
-    users = read_all_train_experiments(True, True, True)
+    users = read_all_train_logs(True, True, True)
     print(users)
     print("-----------------------------------------------------------------------------------------------------")
-    variables = {"user_name": "wonchul2", "project_name": "interojo", \
-                "dataset_info": json.dumps({"a": 1, "b": "c", "c": [1, 2, 3], "d": ["ab", "bc"]}), \
-                "parameters": json.dumps({"a": 1, "b": "c", "c": [1, 2, 3], "d": ["ab", "bc"]})}
-    ret = create_train_experiment(variables, True, True)
+    variables = {"experiment_id": 4, \
+                "log": json.dumps({"a": 1, "b": "c", "c": [1, 2, 3], "d": ["ab", "bc"]})}
+    ret = create_train_log(variables, True, True)
     print(ret)
     print("-----------------------------------------------------------------------------------------------------")
 

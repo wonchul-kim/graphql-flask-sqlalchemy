@@ -13,6 +13,7 @@ class TrainLogSQL(SQLAlchemyObjectType):
         
 class CreateTrainLog(graphene.Mutation):
     class Arguments:
+        experiment_id = graphene.Int(required=True)
         log = graphene.types.json.JSONString(required=True)
         
     done = graphene.Boolean()
@@ -23,8 +24,8 @@ class CreateTrainLog(graphene.Mutation):
     def mutate(root, info, _, **kwargs):
         if "log" in kwargs.keys():
             train_log_db = TrainLog(log=kwargs.get("log"))
-            if 'train_experiment_id' in kwargs.keys():
-                train_experiment_db = db_session.qeury(TrainExperiment).filter_by(id=kwargs.get('train_experiment_id')).first()
+            if 'experiment_id' in kwargs.keys():
+                train_experiment_db = db_session.query(TrainExperiment).filter_by(id=kwargs.get('experiment_id')).first()
                 train_experiment_db.train_logs.append(train_log_db)
                 train_log_db.train_experiment = train_experiment_db
             db_session.add(train_log_db)
