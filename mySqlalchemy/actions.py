@@ -46,14 +46,22 @@ def make_fake_db():
     user_db1 = save_user_db("wonchul1")
     user_db2 = save_user_db("wonchul2")
     user_db3 = save_user_db("wonchul3")
+    user_db4 = save_user_db("wonchul4")
+    user_db5 = save_user_db("wonchul5")
+    user_db6 = save_user_db("wonchul6")
     
-    # obj = db_session.query(User).filter_by(user_name="wonchul11").first()
     
     project_db1 = save_project_db('interojo', 'abc', user_db1)
-    project_db2 = save_project_db('central', 'edf', user_db2)
-    project_db3 = save_project_db("interojo", 'awef', user_db2)
+    project_db2 = save_project_db('central', 'edf', user_db1)
+    project_db3 = save_project_db("samkee", 'fds', user_db1)
     project_db4 = save_project_db("interojo", 'alfekjawelkfjawelkfjawlkefj', user_db2)
-    project_db4 = save_project_db("central", 'aaaaaaaaaa', user_db1)
+    project_db5 = save_project_db("central", 'aaaaaaaaaa', user_db2)
+    project_db6 = save_project_db("interojo", 'alfekjawelkfjawelkfjawlkefj', user_db2)
+    project_db7 = save_project_db("central", 'aaaaaaaaaa', user_db3)
+    project_db8 = save_project_db("interojo", 'alfekjawelkfjawelkfjawlkefj', user_db4)
+    project_db9 = save_project_db("central", 'aaaaaaaaaa', user_db5)
+    project_db10 = save_project_db("interojo", 'aaaaaaaaaa', user_db5)
+    project_db11 = save_project_db("samkee", 'aaaaaaaaaa', user_db5)
     
     
     experiment_db1 = save_experiment_db({"datasets": "interojo_ver1", "input_dir": 'a'}, {"a": 1, "b": 2, "c": "a"}, user_db1, project_db1)
@@ -61,7 +69,16 @@ def make_fake_db():
     experiment_db3 = save_experiment_db({"datasets": "interojo_ver3", "input_dir": 'c'}, {"a": 100, "b": 200, "c": "c"}, user_db1, project_db1)
     experiment_db4 = save_experiment_db({"datasets": "central_ver1", "input_dir": 'i'}, {"a": 1, "b": 2, "c": "a"}, user_db2, project_db2)
     experiment_db5 = save_experiment_db({"datasets": "central_ver2", "input_dir": 'j'}, {"a": 10, "b": 20, "c": "b"}, user_db2, project_db2)
-
+    experiment_db6 = save_experiment_db({"datasets": "interojo_ver4", "input_dir": 'a'}, {"a": 1, "b": 2, "c": "a"}, user_db2, project_db1)
+    experiment_db7 = save_experiment_db({"datasets": "interojo_ver5", "input_dir": 'b'}, {"a": 10, "b": 20, "c": "b"}, user_db3, project_db1)
+    experiment_db8 = save_experiment_db({"datasets": "interojo_ver6", "input_dir": 'c'}, {"a": 100, "b": 200, "c": "c"}, user_db3, project_db1)
+    experiment_db9 = save_experiment_db({"datasets": "samkee_ver1", "input_dir": 'i'}, {"a": 1, "b": 2, "c": "a"}, user_db3, project_db3)
+    experiment_db10 = save_experiment_db({"datasets": "sakmee_ver2", "input_dir": 'j'}, {"a": 10, "b": 20, "c": "b"}, user_db3, project_db3)
+    experiment_db11 = save_experiment_db({"datasets": "samkee_ver3", "input_dir": 'a'}, {"a": 1, "b": 2, "c": "a"}, user_db3, project_db3)
+    experiment_db12 = save_experiment_db({"datasets": "interojo_ver7", "input_dir": 'b'}, {"a": 10, "b": 20, "c": "b"}, user_db4, project_db1)
+    experiment_db13 = save_experiment_db({"datasets": "interojo_ver8", "input_dir": 'c'}, {"a": 100, "b": 200, "c": "c"}, user_db4, project_db1)
+    experiment_db14 = save_experiment_db({"datasets": "central_ver3", "input_dir": 'i'}, {"a": 1, "b": 2, "c": "a"}, user_db4, project_db2)
+    experiment_db15 = save_experiment_db({"datasets": "central_ver4", "input_dir": 'j'}, {"a": 10, "b": 20, "c": "b"}, user_db4, project_db2)
     
     save_log_db({"epoch": 0, "train_loss": 0.3, "val_loss": 0.2, "lr": 0.01}, experiment_db1)
     save_log_db({"epoch": 1, "train_loss": 0.2, "val_loss": 0.1, "lr": 0.001}, experiment_db1)
@@ -70,11 +87,6 @@ def make_fake_db():
     save_log_db({"epoch": 1, "train_loss": 5, "val_loss": 5, "lr": 0.01}, experiment_db2)
     save_log_db({"epoch": 0, "train_loss": 100, "val_loss": 100, "lr": 10}, experiment_db4)
         
-    db_session.delete(user_db1)
-    db_session.commit()
-    # db_session.delete(project_db1)
-    # db_session.commit()
-    
 def filter_by_project(project_name):
     return Project.query.filter_by(project_name=project_name)
     
