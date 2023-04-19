@@ -52,9 +52,9 @@ def make_fake_db():
     
     
     project_db1 = save_project_db('interojo', 'abc', user_db1)
-    project_db2 = save_project_db('central', 'edf', user_db1)
-    project_db3 = save_project_db("samkee", 'fds', user_db1)
-    project_db4 = save_project_db("interojo", 'alfekjawelkfjawelkfjawlkefj', user_db2)
+    project_db2 = save_project_db('interojo', 'edf', user_db1)
+    project_db3 = save_project_db("interojo", 'fds', user_db1)
+    project_db4 = save_project_db("centeral", 'alfekjawelkfjawelkfjawlkefj', user_db2)
     project_db5 = save_project_db("central", 'aaaaaaaaaa', user_db2)
     project_db6 = save_project_db("interojo", 'alfekjawelkfjawelkfjawlkefj', user_db2)
     project_db7 = save_project_db("central", 'aaaaaaaaaa', user_db3)

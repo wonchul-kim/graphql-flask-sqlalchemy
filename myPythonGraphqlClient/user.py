@@ -37,9 +37,17 @@ def read_all_users(use_async=True, verbose=False, only_users=True):
         return edges
 
 def create_user(variables={}, use_async=True, verbose=False, only_done=True):
+    if not "user_name" in variables.keys():
+        variables['user_name'] = "NONE"
+    if variables['user_name'] == "":
+        variables['user_name'] = "NONE"
+    if not "description" in variables.keys():
+        variables['description'] = "NONE"
+    if variables['description'] == "":
+        variables['description'] = "NONE"
     query = """
-            mutation ($user_name: String!) {
-                createUser(userName: $user_name) {
+            mutation ($user_name: String!, $description: String!) {
+                createUser(userName: $user_name, description: $description) {
                     done
                     verbose
                 }
@@ -121,26 +129,38 @@ def find_user(variables={}, use_async=True, verbose=False):
     return response['data']['findUser']
                 
 if __name__ == '__main__':
-    users = read_all_users(True, True, True)
-    print(users)
-    print("-----------------------------------------------------------------------------------------------------")
-    variables = {"user_name": "waefsdfasfasfawefawefawefawefaweflkj"}
-    ret = create_user(variables, True, True)
-    print(ret)
-    print("-----------------------------------------------------------------------------------------------------")
-
-    variables = {"user_name": "wonchul2"}
-    ret = find_user(variables, True, True)
-    print(ret)
     variables = {"user_name": "wonchul1"}
-    ret = find_user(variables, True, True)
-    print(ret)
-    
-    print("-----------------------------------------------------------------------------------------------------")
+    ret = create_user(variables, True, True)
+    variables = {"user_name": "wonchul2"}
+    ret = create_user(variables, True, True)
     variables = {"user_name": "wonchul3"}
-    ret = delete_user(variables)
-    print(ret)
+    ret = create_user(variables, True, True)
+    variables = {"user_name": "wonchul4"}
+    ret = create_user(variables, True, True)
+    variables = {"user_name": "wonchul5"}
+    ret = create_user(variables, True, True)
+    variables = {"user_name": ""}
+    ret = create_user(variables, True, True)
+    variables = {}
+    ret = create_user(variables, True, True)
     print("-----------------------------------------------------------------------------------------------------")
-    variables = {"user_name": "wonchul44", "new_user_name": "wonchul"}
-    ret = update_user(variables)
-    print(ret)
+    users = read_all_users(True, False, True)
+    print(users)
+
+    # print("-----------------------------------------------------------------------------------------------------")
+
+    # variables = {"user_name": "wonchul2"}
+    # ret = find_user(variables, True, True)
+    # print(ret)
+    # variables = {"user_name": "wonchul1"}
+    # ret = find_user(variables, True, True)
+    # print(ret)
+    
+    # print("-----------------------------------------------------------------------------------------------------")
+    # variables = {"user_name": "wonchul3"}
+    # ret = delete_user(variables)
+    # print(ret)
+    # print("-----------------------------------------------------------------------------------------------------")
+    # variables = {"user_name": "wonchul44", "new_user_name": "wonchul"}
+    # ret = update_user(variables)
+    # print(ret)

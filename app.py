@@ -18,7 +18,7 @@ def shutdown_session(exception=None):
 if __name__ == '__main__':
     from mySqlalchemy.actions import init_db, make_fake_db
     init_db()
-    make_fake_db()
+    # make_fake_db()
     app.run()
     
 # example_query = """

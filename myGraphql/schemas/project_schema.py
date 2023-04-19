@@ -11,7 +11,7 @@ class ProjectSQL(SQLAlchemyObjectType):
 class CreateProject(graphene.Mutation):
     class Arguments:
         project_name = graphene.String(required=True)
-        user_name = graphene.String(required=False)
+        user_name = graphene.String(required=True)
         description = graphene.String(required=False)
 
     done = graphene.Boolean()
@@ -20,26 +20,24 @@ class CreateProject(graphene.Mutation):
     
     @classmethod 
     def mutate(root, info, _, **kwargs):
-        if 'project_name' in kwargs.keys():
-            project_name = kwargs.get("project_name")
-            description=kwargs.get('description')
-            
-            if not db_session.query(Project).filter_by(project_name=project_name).first():
-                project_db = Project(project_name=project_name, description=description)
-                if 'user_name' in kwargs.keys():
-                    user_db = db_session.query(User).filter_by(user_name=kwargs.get("user_name")).first()
-                    user_db.projects.append(project_db)
-                    project_db.user = user_db
-                db_session.add(project_db)
-                db_session.commit()
-                done = True 
-                verbose = "Successfully done"
-            else:
-                done = False 
-                verbose = "That project-name already exists"
+        project_name = kwargs.get("project_name")
+        user_name = kwargs.get('user_name')
+        description=kwargs.get('description')
+        
+        user_db = db_session.query(User).filter_by(user_name=user_name).first()
+        project_db = db_session.query(Project).filter_by(user_id=user_db.id, project_name=project_name).first()
+        
+        if not project_db: 
+            project_db = Project(project_name=project_name, description=description)
+            user_db.projects.append(project_db)
+            project_db.user = user_db
+            db_session.add(project_db)
+            db_session.commit()
+            done = True 
+            verbose = "Successfully done"
         else:
             done = False 
-            verbose = "A project-name must be provided"
+            verbose = "That pair of user({}) and project({}) is already exists".format(user_name, project_name)
             
         return CreateProject(done=done, verbose=verbose)
     

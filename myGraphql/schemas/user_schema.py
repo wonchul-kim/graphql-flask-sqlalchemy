@@ -19,23 +19,18 @@ class CreateUser(graphene.Mutation):
     
     @classmethod 
     def mutate(root, info, _, **kwargs):
-        if 'user_name' in kwargs.keys():
-            user_name = kwargs.get("user_name")
+        user_name = kwargs.get("user_name")
+        if not db_session.query(User).filter_by(user_name=user_name).first():
+            user_db = User(user_name=user_name)
             
-            if not db_session.query(User).filter_by(user_name=user_name).first():
-                user_db = User(user_name=user_name)
-                
-                db_session.add(user_db)
-                db_session.commit()
-                done = True
-                verbose = "Successfully done"
-            
-            else:
-                done = False
-                verbose = "That user-name already exists"
+            db_session.add(user_db)
+            db_session.commit()
+            done = True
+            verbose = "Successfully done"
+        
         else:
-            done = False 
-            verbose = "A user-name must be provided"
+            done = False
+            verbose = "That user-name already exists"
             
         return CreateUser(done=done, verbose=verbose)
     

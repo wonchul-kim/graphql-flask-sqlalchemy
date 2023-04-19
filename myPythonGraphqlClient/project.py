@@ -36,9 +36,21 @@ def read_all_projects(use_async=True, verbose=False, only_projects=True):
         return edges
 
 def create_project(variables={}, use_async=True, verbose=False, only_done=True):
+    if not "user_name" in variables.keys():
+        variables['user_name'] = "NONE"
+    if variables['user_name'] == "":
+        variables['user_name'] = "NONE"
+    if not "project_name" in variables.keys():
+        variables['project_name'] = "NONE"
+    if variables['project_name'] == "":
+        variables['project_name'] = "NONE"
+    if not "description" in variables.keys():
+        variables['description'] = "NONE"
+    if variables['description'] == "":
+        variables['description'] = "NONE"
     query = """
-            mutation ($project_name: String!){
-                createProject(projectName: $project_name){
+            mutation ($user_name: String!, $project_name: String!, $description: String!){
+                createProject(userName: $user_name, projectName: $project_name, description: $description){
                     done
                     verbose
                 }
@@ -99,22 +111,34 @@ def update_project(variables={}, use_async=True, verbose=False):
     return response['data']['updateProject']
 
 if __name__ == '__main__':
+    variables = {"project_name": "interojo", "user_name": "wonchul1"}
+    ret = create_project(variables, True, True)
+    variables = {"project_name": "interojo", "user_name": "wonchul1"}
+    ret = create_project(variables, True, True)
+    variables = {"project_name": "interojo", "user_name": "wonchul1"}
+    ret = create_project(variables, True, True)
+    variables = {"project_name": "central", "user_name": "wonchul1"}
+    ret = create_project(variables, True, True)
+    variables = {"project_name": "central", "user_name": "wonchul2"}
+    ret = create_project(variables, True, True)
+    variables = {"project_name": "", "user_name": ""}
+    ret = create_project(variables, True, True)
+    variables = {}
+    ret = create_project(variables, True, True)
+
+    print("-----------------------------------------------------------------------------------------------------")
     users = read_all_projects(True, True, True)
     print(users)
     print("-----------------------------------------------------------------------------------------------------")
-    variables = {"project_name": "central"}
-    ret = create_project(variables, True, True)
-    print(ret)
-    print("-----------------------------------------------------------------------------------------------------")
 
    
-    variables = {"project_name": "aefawef"}
-    ret = delete_project(variables, True, True)
-    print(ret)
-    print("-----------------------------------------------------------------------------------------------------")
+    # variables = {"project_name": "aefawef"}
+    # ret = delete_project(variables, True, True)
+    # print(ret)
+    # print("-----------------------------------------------------------------------------------------------------")
     
-    variables = {"project_name": "waefsdfasfasfawefawefawefawefaweflkj", "new_project_name": "interojo"}
-    ret = update_project(variables, True, True)
-    print(ret)
+    # variables = {"project_name": "waefsdfasfasfawefawefawefawefaweflkj", "new_project_name": "interojo"}
+    # ret = update_project(variables, True, True)
+    # print(ret)
     
     
