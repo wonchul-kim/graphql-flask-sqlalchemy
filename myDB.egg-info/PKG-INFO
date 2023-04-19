@@ -1,0 +1,37 @@
+Metadata-Version: 2.1
+Name: myDB
+Version: 0.0.1
+Summary: Algorithms to create database at AIV Corp.
+Home-page: http://192.168.10.41:8079/aivdb
+Author: AIV
+Author-email: kim.wonchul@aiv.ai
+License: UNKNOWN
+Keywords: AIV,DB
+Platform: UNKNOWN
+Classifier: GraphQL :: Graphene :: SqlAlchemy :: PostgreSQL
+Classifier: Flask
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
+## Flask + SQLAlchemy + GraphQL + postgreSQL
+
+<img src="./figs/flask_sqlalchemy_graphql_arch.png">
+
+### references
+
+1. [flask + sqlalchemy + graphene](https://github.com/graphql-python/graphene-sqlalchemy/tree/master/examples/flask_sqlalchemy)
+
+   - [Graphene Logo Graphene-SQLAlchemy](https://github.com/graphql-python/graphene-sqlalchemy)
+
+2. [GET and POST Requests in GraphQL API using Python requests](https://www.geeksforgeeks.org/get-and-post-requests-in-graphql-api-using-python-requests/)
+
+3. [How to add related object instance using SQLAlchemy](https://github.com/w8s/flask-model-relationships)
+
+4. [python-graphql-client](https://pypi.org/project/python-graphql-client/)
+
+- https://github.com/Wandonium/flask-book-api
+- https://velog.io/@combi_jihoon/GraphQL-%EC%8B%A4%ED%96%89
+- https://hidekuma.github.io/python/graphql/flask/facebook/graphql-with-python-flask/
+- https://github.com/somada141/demo-graphql-sqlalchemy-falcon
+
+

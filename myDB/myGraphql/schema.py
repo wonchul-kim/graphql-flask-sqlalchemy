@@ -1,13 +1,13 @@
-from mySqlalchemy.models import User, Project, TrainExperiment, TrainLog
-from mySqlalchemy.database import db_session
+from myDB.mySqlalchemy.models import User, Project, TrainExperiment, TrainLog
+from myDB.mySqlalchemy.database import db_session
 import graphene 
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from sqlalchemy import and_
 
-from .schemas.user_schema import UserSQL, CreateUser, DeleteUser, UpdateUser
-from .schemas.project_schema import ProjectSQL, CreateProject, DeleteProject, UpdateProject
-from .schemas.train_experiment_schema import TrainExperimentSQL, CreateTrainExperiment
-from .schemas.train_log_schema import TrainLogSQL, CreateTrainLog
+from myDB.myGraphql.schemas.user_schema import UserSQL, CreateUser, DeleteUser, UpdateUser
+from myDB.myGraphql.schemas.project_schema import ProjectSQL, CreateProject, DeleteProject, UpdateProject
+from myDB.myGraphql.schemas.train_experiment_schema import TrainExperimentSQL, CreateTrainExperiment
+from myDB.myGraphql.schemas.train_log_schema import TrainLogSQL, CreateTrainLog
 
 class Query(graphene.ObjectType):
     node = graphene.relay.Node.Field()

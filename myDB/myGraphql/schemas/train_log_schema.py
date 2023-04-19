@@ -1,6 +1,6 @@
 from ast import Expression
-from mySqlalchemy.models import User, Project, TrainExperiment, TrainLog
-from mySqlalchemy.database import db_session
+from myDB.mySqlalchemy.models import User, Project, TrainExperiment, TrainLog
+from myDB.mySqlalchemy.database import db_session
 import graphene 
 from graphene import relay 
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType

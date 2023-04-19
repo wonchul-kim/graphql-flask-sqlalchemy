@@ -1,5 +1,5 @@
-from mySqlalchemy.database import engine, Base, db_session
-from mySqlalchemy.models import User, Project, TrainExperiment, TrainLog
+from myDB.mySqlalchemy.database import engine, Base, db_session
+from myDB.mySqlalchemy.models import User, Project, TrainExperiment, TrainLog
 
 def init_db():
     Base.metadata.drop_all(bind=engine)
