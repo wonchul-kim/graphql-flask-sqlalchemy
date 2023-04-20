@@ -1,6 +1,14 @@
 ## Flask + SQLAlchemy + GraphQL + postgreSQL
 
+This repository is to make a simple MLOps platform such as [wandb](https://wandb.ai/site) which builds all data while training deep learning algorithms.
+
+---
+
+### Process
+
 <img src="./figs/flask_sqlalchemy_graphql_arch.png">
+
+---
 
 ### references
 
