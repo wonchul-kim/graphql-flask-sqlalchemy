@@ -5,15 +5,15 @@ import argparse
 import json
 
 class myDB():
-    def __new__(cls, endpoint_ip="localhost", endpoint_port=5000, verbose=False):
+    def __new__(cls, endpoint_ip="localhost", endpoint_port=5000, verify=False, verbose=False):
         if not hasattr(cls, 'instance'):
             cls.instance = super(myDB, cls).__new__(cls)
         
         return cls.instance
 
-    def __init__(self, endpoint_ip="localhost", endpoint_port=5000, verbose=False):
+    def __init__(self, endpoint_ip="localhost", endpoint_port=5000, verify=False, verbose=False):
         print(f"myDB instance is defined")
-        self.__client = GraphqlClient(endpoint='http://{}:{}/graphql'.format(endpoint_ip, endpoint_port))
+        self.__client = GraphqlClient(endpoint='http://{}:{}/graphql'.format(endpoint_ip, endpoint_port), verify=verify)
         self._var_verbose = verbose
         self._var_config = None
         self._db_info = {}
@@ -158,7 +158,7 @@ class myDB():
 
 
 if __name__ == '__main__':
-    agent = myDB(verbose=True)
+    agent = myDB(endpoint_ip="192.168.11.177", endpoint_port=5000, verify=False, verbose=True)
     agent.init(user_name="wonchul", project_name="interojo")
     agent.save_train_info()
     agent.log({"a": 1, "b": "c", "c": [1, 2, 3], "d": ["ab", "bc"]})

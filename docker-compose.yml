@@ -1,0 +1,11 @@
+version: '3'
+
+services: 
+  flask:
+    build:
+      context: ./
+      dockerfile: /myDB/dockers/flask/Dockerfile 
+    container_name: aiv-db
+    ports:
+      - 5000:5000
+    network_mode: host
