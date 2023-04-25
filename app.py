@@ -7,7 +7,7 @@ from myDB.myGraphql.schema import schema
 app = Flask(__name__)
 host = '192.168.11.177'
 port = 5000
-debug = True 
+debug = True
 
 app.add_url_rule(
     "/graphql", view_func=GraphQLView.as_view("graphql", schema=schema, graphiql=True)
@@ -20,9 +20,17 @@ def shutdown_session(exception=None):
     db_session.remove()
     
 if __name__ == '__main__':
-    from myDB.mySqlalchemy.actions import init_db, make_fake_db
+    # from myDB.mySqlalchemy.actions import init_db, make_fake_db
     # init_db()
     # make_fake_db()
     # app.run(host='192.168.11.177', port=5000)
+    import os
+    from dotenv import load_dotenv
+    print(os.path.exists("myDB/dockers/flask/.env"))
+    load_dotenv("myDB/dockers/flask/.env")
+    host = str(os.environ.get("FLASK_HOST"))
+    port = int(os.environ.get("FLASK_PORT"))
+    debug = bool(os.environ.get("FLASK_DEBUG"))
+
     socketio.run(app, host=host, port=port, debug=debug)
     

@@ -23,3 +23,4 @@ Werkzeug==2.2.3
 zipp==3.15.0
 flask-socketio==5.2.0
 simple-websocket
+python-dotenv
