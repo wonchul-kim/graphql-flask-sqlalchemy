@@ -5,9 +5,6 @@ from myDB.mySqlalchemy.database import db_session
 from myDB.myGraphql.schema import schema
 
 app = Flask(__name__)
-host = '192.168.11.177'
-port = 5000
-debug = True
 
 app.add_url_rule(
     "/graphql", view_func=GraphQLView.as_view("graphql", schema=schema, graphiql=True)
